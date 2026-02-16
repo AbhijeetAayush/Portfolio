@@ -158,136 +158,175 @@ export default function Projects() {
           {projects.map((project, index) => {
             const Icon = project.icon
             return (
-              <motion.div
+              <ProjectCard
                 key={project.title}
-                style={{
-                  y: useTransform(smoothScrollProgress, [0, 1], [
-                    index % 2 === 0 ? 150 : -150,
-                    index % 2 === 0 ? -150 : 150
-                  ], { clamp: false }),
-                  x: useTransform(smoothScrollProgress, [0, 1], [
-                    index % 2 === 0 ? 40 : -40,
-                    index % 2 === 0 ? -40 : 40
-                  ]),
-                  rotate: useTransform(smoothScrollProgress, [0, 1], [
-                    index % 2 === 0 ? 1.5 : -1.5,
-                    index % 2 === 0 ? -1.5 : 1.5
-                  ]),
-                }}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                transition={{ 
-                  duration: 0.8, 
-                  delay: index * 0.2,
-                  ease: [0.4, 0, 0.2, 1]
-                }}
-                className="group relative"
-              >
-                <div className="relative glass-premium rounded-2xl p-8 premium-shadow hover:premium-shadow-lg transition-all duration-300 overflow-hidden h-full flex flex-col">
-                  
-                  <div className="relative z-10 flex-1 flex flex-col">
-                    {/* Icon */}
-                    <motion.div
-                      className={`inline-flex p-4 rounded-2xl bg-gradient-to-br ${project.gradient} mb-6 premium-shadow group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 w-fit`}
-                      whileHover={{ rotate: [0, -10, 10, 0] }}
-                    >
-                      <Icon className="w-7 h-7 text-white" />
-                    </motion.div>
-                    
-                    {/* Title */}
-                    <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4 group-hover:gradient-text transition-all duration-500">
-                      {project.title}
-                    </h3>
-                    
-                    {/* Description */}
-                    <p className="text-gray-600 dark:text-gray-300 mb-8 flex-grow leading-relaxed">
-                      {project.description}
-                    </p>
-
-                    {/* Highlights */}
-                    <div className="mb-8">
-                      <h4 className="text-sm uppercase tracking-widest text-primary-600 mb-4 font-semibold">
-                        Key Highlights
-                      </h4>
-                      <ul className="space-y-3">
-                        {project.highlights.map((highlight, i) => (
-                          <motion.li
-                            key={i}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={inView ? { opacity: 1, x: 0 } : {}}
-                            transition={{ delay: index * 0.2 + i * 0.1 }}
-                            className="flex items-start gap-3 group/item"
-                          >
-                            <motion.div
-                              className={`mt-1.5 w-2 h-2 rounded-full bg-gradient-to-br ${project.gradient} flex-shrink-0 group-hover/item:scale-150 transition-transform duration-300`}
-                            />
-                            <span className="text-sm text-gray-700 dark:text-gray-300 group-hover/item:text-gray-900 dark:group-hover/item:text-gray-100 transition-colors">
-                              {highlight}
-                            </span>
-                          </motion.li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Tech Stack */}
-                    <div className="mb-8">
-                      <h4 className="text-sm uppercase tracking-widest text-primary-600 mb-4 font-semibold">
-                        Tech Stack
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {project.tech.map((tech, i) => (
-                          <motion.span
-                            key={tech}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={inView ? { opacity: 1, scale: 1 } : {}}
-                            transition={{ delay: index * 0.2 + i * 0.05 }}
-                            whileHover={{ scale: 1.1, y: -3 }}
-                            className="px-3 py-1.5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-700 dark:text-gray-300 rounded-lg text-xs font-medium hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 premium-shadow-sm"
-                          >
-                            {tech}
-                          </motion.span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Links */}
-                    <div className={`flex items-center gap-4 mt-auto pt-6 border-t border-gray-200 ${project.hasLiveDemo ? 'justify-between' : 'justify-start'}`}>
-                      {project.hasLiveDemo && project.link && (
-                        <motion.a
-                          href={project.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`flex items-center gap-2 px-6 py-3 bg-gradient-to-r ${project.gradient} text-white rounded-xl font-semibold text-sm premium-shadow hover:premium-glow transition-all duration-500 group/link`}
-                          whileHover={{ x: 5, scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <span>Live Demo</span>
-                          <ExternalLink className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-                        </motion.a>
-                      )}
-                      <motion.a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 font-semibold text-sm group/github"
-                        whileHover={{ x: 5 }}
-                      >
-                        <Github className="w-5 h-5" />
-                        <span>Code</span>
-                      </motion.a>
-                    </div>
-                  </div>
-                  
-                  {/* Glow effect */}
-                  <motion.div
-                    className={`absolute -inset-1 bg-gradient-to-br ${project.gradient} rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10`}
-                  />
-                </div>
-              </motion.div>
+                project={project}
+                index={index}
+                Icon={Icon}
+                smoothScrollProgress={smoothScrollProgress}
+                inView={inView}
+              />
             )
           })}
         </div>
       </div>
     </section>
+  )
+}
+
+type ProjectType = {
+  title: string
+  description: string
+  tech: string[]
+  icon: React.ComponentType<{ className?: string }>
+  gradient: string
+  bgGradient: string
+  link: string
+  github: string
+  hasLiveDemo: boolean
+  highlights: string[]
+}
+
+function ProjectCard({ project, index, Icon, smoothScrollProgress, inView }: {
+  project: ProjectType
+  index: number
+  Icon: React.ComponentType<{ className?: string }>
+  smoothScrollProgress: any
+  inView: boolean
+}) {
+  const isEven = index % 2 === 0
+  const yTransform = useTransform(
+    smoothScrollProgress,
+    [0, 1],
+    [isEven ? 150 : -150, isEven ? -150 : 150],
+    { clamp: false }
+  )
+  const xTransform = useTransform(
+    smoothScrollProgress,
+    [0, 1],
+    [isEven ? 40 : -40, isEven ? -40 : 40]
+  )
+  const rotateTransform = useTransform(
+    smoothScrollProgress,
+    [0, 1],
+    [isEven ? 1.5 : -1.5, isEven ? -1.5 : 1.5]
+  )
+  
+  return (
+    <motion.div
+      style={{
+        y: yTransform,
+        x: xTransform,
+        rotate: rotateTransform,
+      }}
+      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+      transition={{ 
+        duration: 0.8, 
+        delay: index * 0.2,
+        ease: [0.4, 0, 0.2, 1]
+      }}
+      className="group relative"
+    >
+      <div className="relative glass-premium rounded-2xl p-8 premium-shadow hover:premium-shadow-lg transition-all duration-300 overflow-hidden h-full flex flex-col">
+        <div className="relative z-10 flex-1 flex flex-col">
+          {/* Icon */}
+          <motion.div
+            className={`inline-flex p-4 rounded-2xl bg-gradient-to-br ${project.gradient} mb-6 premium-shadow group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 w-fit`}
+            whileHover={{ rotate: [0, -10, 10, 0] }}
+          >
+            <Icon className="w-7 h-7 text-white" />
+          </motion.div>
+          
+          {/* Title */}
+          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4 group-hover:gradient-text transition-all duration-500">
+            {project.title}
+          </h3>
+          
+          {/* Description */}
+          <p className="text-gray-600 dark:text-gray-300 mb-8 flex-grow leading-relaxed">
+            {project.description}
+          </p>
+
+          {/* Highlights */}
+          <div className="mb-8">
+            <h4 className="text-sm uppercase tracking-widest text-primary-600 mb-4 font-semibold">
+              Key Highlights
+            </h4>
+            <ul className="space-y-3">
+              {project.highlights.map((highlight, i) => (
+                <motion.li
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={inView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: index * 0.2 + i * 0.1 }}
+                  className="flex items-start gap-3 group/item"
+                >
+                  <motion.div
+                    className={`mt-1.5 w-2 h-2 rounded-full bg-gradient-to-br ${project.gradient} flex-shrink-0 group-hover/item:scale-150 transition-transform duration-300`}
+                  />
+                  <span className="text-sm text-gray-700 dark:text-gray-300 group-hover/item:text-gray-900 dark:group-hover/item:text-gray-100 transition-colors">
+                    {highlight}
+                  </span>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Tech Stack */}
+          <div className="mb-8">
+            <h4 className="text-sm uppercase tracking-widest text-primary-600 mb-4 font-semibold">
+              Tech Stack
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {project.tech.map((tech, i) => (
+                <motion.span
+                  key={tech}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={inView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ delay: index * 0.2 + i * 0.05 }}
+                  whileHover={{ scale: 1.1, y: -3 }}
+                  className="px-3 py-1.5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-700 dark:text-gray-300 rounded-lg text-xs font-medium hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 premium-shadow-sm"
+                >
+                  {tech}
+                </motion.span>
+              ))}
+            </div>
+          </div>
+
+          {/* Links */}
+          <div className={`flex items-center gap-4 mt-auto pt-6 border-t border-gray-200 ${project.hasLiveDemo ? 'justify-between' : 'justify-start'}`}>
+            {project.hasLiveDemo && project.link && (
+              <motion.a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center gap-2 px-6 py-3 bg-gradient-to-r ${project.gradient} text-white rounded-xl font-semibold text-sm premium-shadow hover:premium-glow transition-all duration-500 group/link`}
+                whileHover={{ x: 5, scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <span>Live Demo</span>
+                <ExternalLink className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+              </motion.a>
+            )}
+            <motion.a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 font-semibold text-sm group/github"
+              whileHover={{ x: 5 }}
+            >
+              <Github className="w-5 h-5" />
+              <span>Code</span>
+            </motion.a>
+          </div>
+        </div>
+        
+        {/* Glow effect */}
+        <motion.div
+          className={`absolute -inset-1 bg-gradient-to-br ${project.gradient} rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10`}
+        />
+      </div>
+    </motion.div>
   )
 }

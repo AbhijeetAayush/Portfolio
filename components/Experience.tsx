@@ -124,119 +124,156 @@ export default function Experience() {
           {experiences.map((exp, index) => {
             const Icon = exp.icon
             return (
-              <motion.div
+              <ExperienceCard
                 key={`${exp.company}-${index}`}
-                style={{
-                  y: useTransform(smoothScrollProgress, [0, 1], [
-                    index % 2 === 0 ? 80 : -80,
-                    index % 2 === 0 ? -80 : 80
-                  ], { clamp: false }),
-                  x: useTransform(smoothScrollProgress, [0, 1], [
-                    index % 2 === 0 ? 30 : -30,
-                    index % 2 === 0 ? -30 : 30
-                  ]),
-                  rotate: useTransform(smoothScrollProgress, [0, 1], [
-                    index % 2 === 0 ? 1 : -1,
-                    index % 2 === 0 ? -1 : 1
-                  ]),
-                }}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ 
-                  duration: 0.8, 
-                  delay: index * 0.2,
-                  ease: [0.4, 0, 0.2, 1]
-                }}
-                className="group relative"
-              >
-                <div className="relative glass-premium rounded-2xl p-8 premium-shadow hover:premium-shadow-lg transition-all duration-300 overflow-hidden">
-                  
-                  <div className="relative z-10">
-                    <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-8">
-                      <div className="flex items-start space-x-5 mb-6 md:mb-0">
-                        <motion.div
-                          className={`p-4 bg-gradient-to-br ${exp.gradient} rounded-2xl premium-shadow group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}
-                          whileHover={{ rotate: [0, -10, 10, 0] }}
-                        >
-                          <Icon className="w-7 h-7 text-white" />
-                        </motion.div>
-                        <div>
-                          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:gradient-text transition-all duration-500">
-                            {exp.title}
-                          </h3>
-                          <p className={`text-2xl font-semibold bg-gradient-to-r ${exp.gradient} bg-clip-text text-transparent mb-3`}>
-                            {exp.company}
-                          </p>
-                          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                            <span className="flex items-center gap-2">
-                              <MapPin className="w-4 h-4 text-primary-500" />
-                              {exp.location}
-                            </span>
-                            <span className="flex items-center gap-2">
-                              <Calendar className="w-4 h-4 text-primary-500" />
-                              {exp.period}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mb-8">
-                      <h4 className="text-sm uppercase tracking-widest text-primary-600 mb-4 font-semibold flex items-center gap-2">
-                        <TrendingUp className="w-4 h-4" />
-                        Key Achievements
-                      </h4>
-                      <ul className="space-y-3">
-                        {exp.achievements.map((achievement, i) => (
-                          <motion.li
-                            key={i}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={inView ? { opacity: 1, x: 0 } : {}}
-                            transition={{ delay: index * 0.2 + i * 0.1 }}
-                            className="flex items-start gap-3 group/item"
-                          >
-                            <motion.div
-                              className={`mt-1.5 w-2 h-2 rounded-full bg-gradient-to-br ${exp.gradient} flex-shrink-0 group-hover/item:scale-150 transition-transform duration-300`}
-                            />
-                            <span className="text-gray-700 dark:text-gray-300 leading-relaxed group-hover/item:text-gray-900 dark:group-hover/item:text-gray-100 transition-colors">
-                              {achievement}
-                            </span>
-                          </motion.li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div>
-                      <h4 className="text-sm uppercase tracking-widest text-primary-600 mb-4 font-semibold">
-                        Tech Stack
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {exp.tech.map((tech, i) => (
-                          <motion.span
-                            key={tech}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={inView ? { opacity: 1, scale: 1 } : {}}
-                            transition={{ delay: index * 0.2 + i * 0.05 }}
-                            whileHover={{ scale: 1.1, y: -3 }}
-                            className={`px-4 py-2 bg-gradient-to-br ${exp.gradient} text-white rounded-xl text-xs font-semibold premium-shadow-sm hover:premium-shadow transition-all duration-300 cursor-default`}
-                          >
-                            {tech}
-                          </motion.span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Glow effect */}
-                  <motion.div
-                    className={`absolute -inset-1 bg-gradient-to-br ${exp.gradient} rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10`}
-                  />
-                </div>
-              </motion.div>
+                exp={exp}
+                index={index}
+                Icon={Icon}
+                smoothScrollProgress={smoothScrollProgress}
+                inView={inView}
+              />
             )
           })}
         </div>
       </div>
     </section>
+  )
+}
+
+type ExperienceType = {
+  title: string
+  company: string
+  location: string
+  period: string
+  icon: React.ComponentType<{ className?: string }>
+  gradient: string
+  achievements: string[]
+  tech: string[]
+}
+
+function ExperienceCard({ exp, index, Icon, smoothScrollProgress, inView }: {
+  exp: ExperienceType
+  index: number
+  Icon: React.ComponentType<{ className?: string }>
+  smoothScrollProgress: any
+  inView: boolean
+}) {
+  const isEven = index % 2 === 0
+  const yTransform = useTransform(
+    smoothScrollProgress,
+    [0, 1],
+    [isEven ? 80 : -80, isEven ? -80 : 80],
+    { clamp: false }
+  )
+  const xTransform = useTransform(
+    smoothScrollProgress,
+    [0, 1],
+    [isEven ? 30 : -30, isEven ? -30 : 30]
+  )
+  const rotateTransform = useTransform(
+    smoothScrollProgress,
+    [0, 1],
+    [isEven ? 1 : -1, isEven ? -1 : 1]
+  )
+  
+  return (
+    <motion.div
+      style={{
+        y: yTransform,
+        x: xTransform,
+        rotate: rotateTransform,
+      }}
+      initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+      animate={inView ? { opacity: 1, x: 0 } : {}}
+      transition={{ 
+        duration: 0.8, 
+        delay: index * 0.2,
+        ease: [0.4, 0, 0.2, 1]
+      }}
+      className="group relative"
+    >
+      <div className="relative glass-premium rounded-2xl p-8 premium-shadow hover:premium-shadow-lg transition-all duration-300 overflow-hidden">
+        <div className="relative z-10">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-8">
+            <div className="flex items-start space-x-5 mb-6 md:mb-0">
+              <motion.div
+                className={`p-4 bg-gradient-to-br ${exp.gradient} rounded-2xl premium-shadow group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}
+                whileHover={{ rotate: [0, -10, 10, 0] }}
+              >
+                <Icon className="w-7 h-7 text-white" />
+              </motion.div>
+              <div>
+                <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:gradient-text transition-all duration-500">
+                  {exp.title}
+                </h3>
+                <p className={`text-2xl font-semibold bg-gradient-to-r ${exp.gradient} bg-clip-text text-transparent mb-3`}>
+                  {exp.company}
+                </p>
+                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                  <span className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-primary-500" />
+                    {exp.location}
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-primary-500" />
+                    {exp.period}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-8">
+            <h4 className="text-sm uppercase tracking-widest text-primary-600 mb-4 font-semibold flex items-center gap-2">
+              <TrendingUp className="w-4 h-4" />
+              Key Achievements
+            </h4>
+            <ul className="space-y-3">
+              {exp.achievements.map((achievement, i) => (
+                <motion.li
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={inView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: index * 0.2 + i * 0.1 }}
+                  className="flex items-start gap-3 group/item"
+                >
+                  <motion.div
+                    className={`mt-1.5 w-2 h-2 rounded-full bg-gradient-to-br ${exp.gradient} flex-shrink-0 group-hover/item:scale-150 transition-transform duration-300`}
+                  />
+                  <span className="text-gray-700 dark:text-gray-300 leading-relaxed group-hover/item:text-gray-900 dark:group-hover/item:text-gray-100 transition-colors">
+                    {achievement}
+                  </span>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-sm uppercase tracking-widest text-primary-600 mb-4 font-semibold">
+              Tech Stack
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {exp.tech.map((tech, i) => (
+                <motion.span
+                  key={tech}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={inView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ delay: index * 0.2 + i * 0.05 }}
+                  whileHover={{ scale: 1.1, y: -3 }}
+                  className={`px-4 py-2 bg-gradient-to-br ${exp.gradient} text-white rounded-xl text-xs font-semibold premium-shadow-sm hover:premium-shadow transition-all duration-300 cursor-default`}
+                >
+                  {tech}
+                </motion.span>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Glow effect */}
+        <motion.div
+          className={`absolute -inset-1 bg-gradient-to-br ${exp.gradient} rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10`}
+        />
+      </div>
+    </motion.div>
   )
 }

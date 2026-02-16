@@ -120,13 +120,13 @@ export default function Contact() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass mb-6"
           >
             <Sparkles className="w-4 h-4 text-primary-500" />
-            <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Let's Connect</span>
+            <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Let&apos;s Connect</span>
           </motion.div>
           <h2 className="text-5xl md:text-6xl font-serif font-bold mb-4">
             <span className="text-gray-900 dark:text-gray-100">Get In Touch</span>
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Let's collaborate on your next project
+            Let&apos;s collaborate on your next project
           </p>
         </motion.div>
 

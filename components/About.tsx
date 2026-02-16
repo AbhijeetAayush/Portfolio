@@ -92,7 +92,7 @@ export default function About() {
                 Biography
               </h2>
               <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                Work for money and <span className="gradient-text font-semibold">code for love</span>! I'm Abhijeet, a Software Developer 
+                Work for money and <span className="gradient-text font-semibold">code for love</span>! I&apos;m Abhijeet, a Software Developer 
                 specializing in backend engineering, API development, full-stack applications, 
                 and cloud-native systems. With a strong foundation in data processing, 
                 microservices, CI/CD, and object-oriented programming, I focus on building 

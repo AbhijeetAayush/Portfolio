@@ -135,7 +135,6 @@ export default function Hero() {
       {/* Ultra Premium Floating Particles with Parallax */}
       {[...Array(30)].map((_, i) => {
         const particleSpeed = 0.1 + (i % 3) * 0.15
-        const particleY = useTransform(scrollYProgress, [0, 1], [0, -200 * particleSpeed])
         return (
           <motion.div
             key={i}
@@ -143,8 +142,6 @@ export default function Hero() {
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-            y: particleY,
-            x: useTransform(smoothScrollProgress, [0, 1], [0, (Math.random() * 100 - 50) * particleSpeed]),
             }}
             animate={{
               y: [0, -150, 0],

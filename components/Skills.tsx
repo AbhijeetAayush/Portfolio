@@ -138,82 +138,114 @@ export default function Skills() {
         <div className="grid md:grid-cols-2 gap-8">
           {skillCategories.map((category, index) => {
             const Icon = category.icon
-            const isHovered = hoveredIndex === index
-            
             return (
-              <motion.div
+              <SkillCard
                 key={category.title}
-                style={{
-                  y: useTransform(scrollYProgress, [0, 1], [
-                    index % 2 === 0 ? 100 : -100,
-                    index % 2 === 0 ? -100 : 100
-                  ])
-                }}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                transition={{ 
-                  duration: 0.8, 
-                  delay: index * 0.15,
-                  ease: [0.4, 0, 0.2, 1]
-                }}
-                onHoverStart={() => setHoveredIndex(index)}
-                onHoverEnd={() => setHoveredIndex(null)}
-                className="group relative"
-              >
-                <div className="relative glass-premium rounded-2xl p-6 premium-shadow hover:premium-shadow-lg transition-all duration-300 overflow-hidden">
-                  
-                  {/* Icon */}
-                  <motion.div
-                    className={`inline-flex p-4 rounded-2xl bg-gradient-to-br ${category.color} mb-6 premium-shadow group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}
-                    whileHover={{ rotate: [0, -10, 10, -10, 0] }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <Icon className="w-7 h-7 text-white" />
-                  </motion.div>
-                  
-                  {/* Title */}
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 group-hover:gradient-text transition-all duration-500">
-                    {category.title}
-                  </h3>
-                  
-                  {/* Skills grid */}
-                  <div className="flex flex-wrap gap-3">
-                    {category.skills.map((skill, skillIndex) => (
-                      <motion.span
-                        key={skill}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={inView ? { opacity: 1, scale: 1 } : {}}
-                        transition={{ 
-                          delay: index * 0.15 + skillIndex * 0.05,
-                          type: "spring",
-                          stiffness: 200
-                        }}
-                        whileHover={{ 
-                          scale: 1.1, 
-                          y: -4,
-                          rotate: [0, -5, 5, 0]
-                        }}
-                            className="relative px-4 py-2.5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-700 dark:text-gray-300 rounded-xl text-sm font-medium hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 premium-shadow-sm group-hover:premium-shadow cursor-default overflow-hidden"
-                      >
-                        <span className="relative z-10">{skill}</span>
-                        <motion.div
-                          className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
-                        />
-                      </motion.span>
-                    ))}
-                  </div>
-                  
-                  {/* Glow effect on hover */}
-                  <motion.div
-                    className={`absolute -inset-1 bg-gradient-to-br ${category.color} rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10`}
-                    animate={isHovered ? { scale: 1.1 } : { scale: 1 }}
-                  />
-                </div>
-              </motion.div>
+                category={category}
+                index={index}
+                Icon={Icon}
+                hoveredIndex={hoveredIndex}
+                setHoveredIndex={setHoveredIndex}
+                smoothScrollProgress={smoothScrollProgress}
+                inView={inView}
+              />
             )
           })}
         </div>
       </div>
     </section>
+  )
+}
+
+type SkillCategoryType = {
+  title: string
+  icon: React.ComponentType<{ className?: string }>
+  skills: string[]
+  color: string
+  bgColor: string
+}
+
+function SkillCard({ category, index, Icon, hoveredIndex, setHoveredIndex, smoothScrollProgress, inView }: {
+  category: SkillCategoryType
+  index: number
+  Icon: React.ComponentType<{ className?: string }>
+  hoveredIndex: number | null
+  setHoveredIndex: (index: number | null) => void
+  smoothScrollProgress: any
+  inView: boolean
+}) {
+  const isHovered = hoveredIndex === index
+  const isEven = index % 2 === 0
+  const yTransform = useTransform(
+    smoothScrollProgress,
+    [0, 1],
+    [isEven ? 100 : -100, isEven ? -100 : 100]
+  )
+  
+  return (
+    <motion.div
+      style={{
+        y: yTransform,
+      }}
+      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+      transition={{ 
+        duration: 0.8, 
+        delay: index * 0.15,
+        ease: [0.4, 0, 0.2, 1]
+      }}
+      onHoverStart={() => setHoveredIndex(index)}
+      onHoverEnd={() => setHoveredIndex(null)}
+      className="group relative"
+    >
+      <div className="relative glass-premium rounded-2xl p-6 premium-shadow hover:premium-shadow-lg transition-all duration-300 overflow-hidden">
+        {/* Icon */}
+        <motion.div
+          className={`inline-flex p-4 rounded-2xl bg-gradient-to-br ${category.color} mb-6 premium-shadow group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}
+          whileHover={{ rotate: [0, -10, 10, -10, 0] }}
+          transition={{ duration: 0.5 }}
+        >
+          <Icon className="w-7 h-7 text-white" />
+        </motion.div>
+        
+        {/* Title */}
+        <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 group-hover:gradient-text transition-all duration-500">
+          {category.title}
+        </h3>
+        
+        {/* Skills grid */}
+        <div className="flex flex-wrap gap-3">
+          {category.skills.map((skill, skillIndex) => (
+            <motion.span
+              key={skill}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={inView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ 
+                delay: index * 0.15 + skillIndex * 0.05,
+                type: "spring",
+                stiffness: 200
+              }}
+              whileHover={{ 
+                scale: 1.1, 
+                y: -4,
+                rotate: [0, -5, 5, 0]
+              }}
+              className="relative px-4 py-2.5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-700 dark:text-gray-300 rounded-xl text-sm font-medium hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 premium-shadow-sm group-hover:premium-shadow cursor-default overflow-hidden"
+            >
+              <span className="relative z-10">{skill}</span>
+              <motion.div
+                className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
+              />
+            </motion.span>
+          ))}
+        </div>
+        
+        {/* Glow effect on hover */}
+        <motion.div
+          className={`absolute -inset-1 bg-gradient-to-br ${category.color} rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10`}
+          animate={isHovered ? { scale: 1.1 } : { scale: 1 }}
+        />
+      </div>
+    </motion.div>
   )
 }
